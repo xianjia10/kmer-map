@@ -120,14 +120,37 @@ vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpo
     }
     return klist;
 }
-
-void searchbypaf(string paffiles,string reffile,string readsfile)
+int generate_pos(string b[],FILE *fp,FILE *fw)
+{
+    unordered_map<uint64_t,uint32_t> ref_list;
+    vector<pair<uint64_t,uint32_t>> reads_list;
+    ref_list=searchinref(atoi(b[7].c_str()),atoi(b[8].c_str()));
+    //cout<<"searchinref "<<ref_list.size()<<endl;
+    reads_list=searchinreads (b[0],atoi(b[2].c_str()),atoi(b[3].c_str()),fp);
+    //cout<<"searchinreads "<<reads_list.size()<<endl;
+    for(int i=0;i<9;i++)
+    {
+        fprintf(fw, "%s\t",b[i].c_str());
+    }
+    auto iter_reads=reads_list.begin();
+    while(iter_reads!=reads_list.end())
+    {
+        auto ietr_ref=ref_list.find(iter_reads->first);
+        if(ietr_ref!=ref_list.end())
+        {
+            fprintf(fw, "%d,%d\t", iter_reads->second,ietr_ref->second);
+        }
+        iter_reads++;
+    }
+    fprintf(fw, "\n");
+    return 1;
+}
+int read_file(string paffiles,string reffile,string readsfile)
 {
     string temp;
     string name=" ";
     string b[100];
-    unordered_map<uint64_t,uint32_t> ref_list;
-    vector<pair<uint64_t,uint32_t>> reads_list;
+    
     ifstream paffile(paffiles);
     ref_lib.clear();
     reads_lib.clear();
@@ -139,66 +162,27 @@ void searchbypaf(string paffiles,string reffile,string readsfile)
     if (fw == NULL)
     {
         perror("file fopen error!");
-        return;
+        exit(0);
     }
     fp=fopen(readsfile.c_str(),"r");
     if (fp == NULL)
     {
         perror("file fopen error!");
-        return;
+        exit(0);
     }
     while(getline(paffile,temp))
     {
-        //cout<<temp<<endl;
         
         split(temp,b);
-        //cout<<"read info: "<<b[5]<<atoi(b[7].c_str())<<atoi(b[8].c_str())<<endl;
         if(name!=b[5])
         {
             ref_data.clear();
             ref_lib_init(b[5],reffile);
             name=b[5];
-            //cout<<"success"<<endl;
         }
-        ref_list=searchinref(atoi(b[7].c_str()),atoi(b[8].c_str()));
-        cout<<"searchinref "<<ref_list.size()<<endl;
-        reads_list=searchinreads (b[0],atoi(b[2].c_str()),atoi(b[3].c_str()),fp);
-        cout<<"searchinreads "<<reads_list.size()<<endl;
-        for(int i=0;i<9;i++)
-        {
-            fprintf(fw, "%s\t",b[i].c_str());
-        }
-        auto iter_reads=reads_list.begin();
-        while(iter_reads!=reads_list.end())
-        {
-            auto ietr_ref=ref_list.find(iter_reads->first);
-            if(ietr_ref!=ref_list.end())
-            {
-                fprintf(fw, "%d,%d\t", iter_reads->second,ietr_ref->second);
-            }
-            iter_reads++;
-        }
-        fprintf(fw, "\n");
-
+        generate_pos(b,fp,fw);
     }
     fclose(fw);
     fclose(fp);
-}
-
-int main(int argc,char **argv)
-{
-    // if(argc<4)
-    // {
-    //     cout<<"too few argv:1.paf 2.referencepos 3.readspos"<<endl;
-    //     exit(0);
-    // }
-    string paffiles,reffile,readsfile;
-    // paffiles=argv[1];
-    // reffile=argv[2];
-    // readsfile=argv[3];
-    paffiles="/data/zhaoxianjia/data/tomato_data/tomato.srt.paf";
-    reffile="/data/zhaoxianjia/data/tomato_data/ref.pos";
-    readsfile="/data/zhaoxianjia/data/tomato_data/query.pos";
-    searchbypaf(paffiles,reffile,readsfile);
-    return 0;
+    return 1;
 }
