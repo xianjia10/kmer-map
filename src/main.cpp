@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
 	);
 	auto filter = (
 		option("-p", "--query").doc("Ref/Query pos file built with build") & value("r_pos",rpos) &value("query",qpos),
-		option("-", "--reference").doc("Reference fasta file") & value("reffile", ref_file),
+		option("-", "--reference").doc("Reference fasta file") & value("reffile", ref_file)
 	);
     auto cli = (
         option("-t", "--threads").doc("Number of threads") & value("threads", t2),
