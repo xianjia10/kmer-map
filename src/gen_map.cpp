@@ -180,7 +180,7 @@ int read_file(string paffiles,string reffile,string readsfile)
             ref_lib_init(b[5],reffile);
             name=b[5];
         }
-        generate_pos(b,fp,fw);
+        generate_posmap(b,fp,fw);
     }
     fclose(fw);
     fclose(fp);
