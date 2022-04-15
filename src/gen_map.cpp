@@ -158,7 +158,7 @@ int read_file(string paffiles,string reffile,string readsfile)
     lib_init(reffile,ref_lib);
     lib_init(readsfile,reads_lib);
     FILE *fw=NULL,*fp=NULL;
-    string path=paffiles+".pos";
+    string path=paffiles.substr(0,paffiles.size()-3)+"map";
     fw=fopen(path.c_str(),"w");
     if (fw == NULL)
     {
