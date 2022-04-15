@@ -50,12 +50,12 @@ void lib_init(string path,lib &library)
     cout<<"library success"<<endl;
 }
 
+//read reference
 void ref_lib_init(string name ,string path)
 {
     uint32_t p,fposstart,fposend;
     fposstart=ref_lib[name].first;
     fposend=ref_lib[name].second;
-    //cout<<fposstart<<" "<<fposend<<endl;
     uint64_t k;
     string buf;
     FILE *fp;
@@ -74,11 +74,11 @@ inline bool compare(KMER a,uint32_t b)
     return a.first<b; 
 }
 
+//search kmer in reference
 unordered_map<uint64_t,uint32_t> searchinref(int startpos,int endpos)
 {
     unordered_map<uint64_t,uint32_t> klist;
     auto iters= lower_bound(ref_data.begin(),ref_data.end(),startpos,compare);
-    //cout<<iters->first<<endl;
     auto itere = lower_bound(ref_data.begin(),ref_data.end(),endpos,compare);
     while(iters!=itere)
     {
@@ -88,7 +88,7 @@ unordered_map<uint64_t,uint32_t> searchinref(int startpos,int endpos)
     return klist;
 }
 
-
+//search kemr in query 
 vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpos,FILE *fp)
 {
     pair<uint64_t,uint32_t> pos;
@@ -99,7 +99,6 @@ vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpo
     int num;
     fposstart=reads_lib[name].first;
     fposend=reads_lib[name].second;
-    //cout<<fposstart<<" "<<fposend<<endl;
     num=(fposend - fposstart)/21;
     int lo = 0, hi = num;
     while (lo < hi) {
@@ -121,14 +120,14 @@ vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpo
     }
     return klist;
 }
+
+//genrate kmer pos map
 int generate_posmap(string b[],FILE *fp,FILE *fw)
 {
     unordered_map<uint64_t,uint32_t> ref_list;
     vector<pair<uint64_t,uint32_t>> reads_list;
     ref_list=searchinref(atoi(b[7].c_str()),atoi(b[8].c_str()));
-    //cout<<"searchinref "<<ref_list.size()<<endl;
     reads_list=searchinreads (b[0],atoi(b[2].c_str()),atoi(b[3].c_str()),fp);
-    //cout<<"searchinreads "<<reads_list.size()<<endl;
     for(int i=0;i<9;i++)
     {
         fprintf(fw, "%s\t",b[i].c_str());
@@ -146,12 +145,13 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
     fprintf(fw, "\n");
     return 1;
 }
+
+//read paf file and init data's index
 int read_file(string paffiles,string reffile,string readsfile)
 {
     string temp;
     string name=" ";
     string b[100];
-    
     ifstream paffile(paffiles);
     ref_lib.clear();
     reads_lib.clear();
