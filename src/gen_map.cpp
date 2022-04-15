@@ -120,7 +120,7 @@ vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpo
     }
     return klist;
 }
-int generate_pos(string b[],FILE *fp,FILE *fw)
+int generate_posmap(string b[],FILE *fp,FILE *fw)
 {
     unordered_map<uint64_t,uint32_t> ref_list;
     vector<pair<uint64_t,uint32_t>> reads_list;
