@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 
 
     if(!parse(argc, const_cast<char **>(argv), cli)) {
-		cout << "Usage:\n" << usage_lines(cli, "KAfilter", fmt)
+		cout << "Usage:\n" << usage_lines(cli, "kmermap", fmt)
      << "\nOptions:\n" << documentation(cli, fmt) << '\n';
 		cout << "\nerror: Too few arguments!\n";
 		// throw "Division by zero condition!";
