@@ -4,7 +4,7 @@ using namespace std;
 
 typedef pair<uint32_t,uint64_t> KMER;
 typedef vector<KMER> KMER_LIST;
-typedef unordered_map<string,pair<uint32_t,uint32_t>> lib;
+typedef unordered_map<string,pair<uint64_t,uint64_t>> lib;
 lib ref_lib,reads_lib; 
 KMER_LIST ref_data;
 
@@ -25,7 +25,7 @@ void split(string q,string item[])
 void lib_init(string path,lib &library)
 {
     string buf,name;
-    uint32_t fposstart,fposend;
+    uint64_t fposstart,fposend;
     int flag=0;
     ifstream  posfile(path);
     while(getline(posfile,buf))
@@ -53,7 +53,8 @@ void lib_init(string path,lib &library)
 //read reference
 void ref_lib_init(string name ,string path)
 {
-    uint32_t p,fposstart,fposend;
+    uint32_t p;
+    uint64_t fposstart,fposend;
     fposstart=ref_lib[name].first;
     fposend=ref_lib[name].second;
     uint64_t k;
@@ -94,8 +95,8 @@ vector<pair<uint64_t,uint32_t>> searchinreads(string name,int startpos,int endpo
     pair<uint64_t,uint32_t> pos;
     vector<pair<uint64_t,uint32_t>> klist;
     string buf;
-    uint32_t fposstart,fposend,p;
-    uint64_t k;
+    uint32_t p;
+    uint64_t k,fposstart,fposend;
     int num;
     fposstart=reads_lib[name].first;
     fposend=reads_lib[name].second;
@@ -147,7 +148,7 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
 }
 
 //read paf file and init data's index
-int read_file(string paffiles,string reffile,string readsfile)
+int read_file(string paffiles,string reffile,string readsfile,string out_path)
 {
     string temp;
     string name=" ";
@@ -158,25 +159,20 @@ int read_file(string paffiles,string reffile,string readsfile)
     lib_init(reffile,ref_lib);
     lib_init(readsfile,reads_lib);
     FILE *fw=NULL,*fp=NULL;
-    string path=paffiles.substr(0,paffiles.size()-3)+"map";
+    string path=out_path+"kmer.map";
     fw=fopen(path.c_str(),"w");
-    if (fw == NULL)
-    {
+    if (fw == NULL){
         perror("file fopen error!");
         exit(0);
     }
     fp=fopen(readsfile.c_str(),"r");
-    if (fp == NULL)
-    {
+    if (fp == NULL){
         perror("file fopen error!");
         exit(0);
     }
-    while(getline(paffile,temp))
-    {
-        
+    while(getline(paffile,temp)){ 
         split(temp,b);
-        if(name!=b[5])
-        {
+        if(name!=b[5]){
             ref_data.clear();
             ref_lib_init(b[5],reffile);
             name=b[5];
