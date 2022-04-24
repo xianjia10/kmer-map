@@ -3,6 +3,7 @@
 #include "kmerfind.hpp"
 #include "gen_map.hpp"
 #include <thread>
+#include<unistd.h>
 
 
 using namespace clipp;using std::cout;using std::string;using std::thread;
@@ -124,6 +125,12 @@ int main(int argc, char* argv[]) {
 	if (mode=='g'){
 		if (align != ""){
 			// align_fmt will be transmited later.
+			string newalign=align.substr(0,align.size()-3)+"srt.paf";
+			if(access(newalign.c_str(),F_OK)==-1){
+				string cmd="sort -k6,6 -k1,1 "+align+" > "+newalign; 
+				system(cmd.c_str());
+				cout<<"align file trans"<<std::endl;
+			}
 			read_file(align,rpos,qpos,output_path);
 		}
 	}

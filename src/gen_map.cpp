@@ -127,6 +127,7 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
 {
     unordered_map<uint64_t,uint32_t> ref_list;
     vector<pair<uint64_t,uint32_t>> reads_list;
+    int count=0;
     ref_list=searchinref(atoi(b[7].c_str()),atoi(b[8].c_str()));
     reads_list=searchinreads (b[0],atoi(b[2].c_str()),atoi(b[3].c_str()),fp);
     for(int i=0;i<9;i++)
@@ -140,6 +141,16 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
         if(ietr_ref!=ref_list.end())
         {
             fprintf(fw, "%d,%d\t", iter_reads->second,ietr_ref->second);
+            count++;
+            if(count==10000)
+            {
+                fprintf(fw, "\n");
+                for(int i=0;i<9;i++)
+                {
+                    fprintf(fw, "%s\t",b[i].c_str());
+                }
+                count=0;
+            }
         }
         iter_reads++;
     }
