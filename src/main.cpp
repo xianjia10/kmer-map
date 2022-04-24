@@ -1,7 +1,7 @@
 #include "clipp.h"
 #include <iostream>
 #include "kmerfind.hpp"
-#include "gen_map.hpp"
+#include "generatemap.hpp"
 #include <thread>
 #include<unistd.h>
 

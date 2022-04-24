@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#include"gen_map.hpp"
+#include"generatemap.hpp"
 using namespace std;
 
 typedef pair<uint32_t,uint64_t> KMER;

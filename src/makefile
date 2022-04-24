@@ -1,6 +1,6 @@
-object = main.o kmerfind.o gen_map.o
+object = main.o kmerfind.o generatemap.o
 target = kmermap
-kmfilter: $(object)
+kmermap: $(object)
 	g++ -o $(target) $(object) -lpthread
 	mv $(target) ../
 .PHONY : clean
