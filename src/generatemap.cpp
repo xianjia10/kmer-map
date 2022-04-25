@@ -164,12 +164,13 @@ int read_file(string paffiles,string reffile,string readsfile,string out_path)
     string temp;
     string name=" ";
     string b[100];
+    uint64_t fpos;
     ifstream paffile(paffiles);
     ref_lib.clear();
     reads_lib.clear();
     lib_init(reffile,ref_lib);
     lib_init(readsfile,reads_lib);
-    FILE *fw=NULL,*fp=NULL;
+    FILE *fw=NULL,*fp=NULL,*ri=NULL,*qi=NULL;
     string path=out_path+"kmer.map";
     fw=fopen(path.c_str(),"w");
     if (fw == NULL){
@@ -181,16 +182,30 @@ int read_file(string paffiles,string reffile,string readsfile,string out_path)
         perror("file fopen error!");
         exit(0);
     }
+    string pathr=out_path+"reference.index";
+    string pathq=out_path+"query.index";
+    ri=fopen(pathr.c_str(),"w");
+    qi=fopen(pathq.c_str(),"w");
+    if(ri==NULL||qi==NULL)
+    {
+        perror("file fopen error!");
+        exit(0);
+    }
     while(getline(paffile,temp)){ 
         split(temp,b);
+        fpos=ftell(fw);
         if(name!=b[5]){
             ref_data.clear();
             ref_lib_init(b[5],reffile);
             name=b[5];
+            fprintf(ri,"%s\t%ld\n",name.c_str(),fpos);
         }
+        fprintf(qi,"%s\t%ld\n",b[0].c_str(),fpos);
         generate_posmap(b,fp,fw);
     }
     fclose(fw);
     fclose(fp);
+    fclose(ri);
+    fclose(qi);
     return 1;
 }
