@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
 				system(cmd.c_str());
 				cout<<"align file trans"<<std::endl;
 			}
-			read_file(align,rpos,qpos,output_path);
+			read_file(newalign,rpos,qpos,output_path);
 		}
 	}
 	return 0;
