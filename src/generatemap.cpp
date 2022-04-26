@@ -171,7 +171,7 @@ int read_file(string paffiles,string reffile,string readsfile,string out_path)
     lib_init(reffile,ref_lib);
     lib_init(readsfile,reads_lib);
     FILE *fw=NULL,*fp=NULL,*ri=NULL,*qi=NULL;
-    string path=out_path+"kmer.map";
+    string path=out_path+paffiles.substr(0,paffiles.size()-3)+"kmer.map";
     fw=fopen(path.c_str(),"w");
     if (fw == NULL){
         perror("file fopen error!");
@@ -182,8 +182,8 @@ int read_file(string paffiles,string reffile,string readsfile,string out_path)
         perror("file fopen error!");
         exit(0);
     }
-    string pathr=out_path+"reference.index";
-    string pathq=out_path+"query.index";
+    string pathr=out_path+paffiles.substr(0,paffiles.size()-3)+"reference.index";
+    string pathq=out_path+paffiles.substr(0,paffiles.size()-3)+"query.index";
     ri=fopen(pathr.c_str(),"w");
     qi=fopen(pathq.c_str(),"w");
     if(ri==NULL||qi==NULL)
