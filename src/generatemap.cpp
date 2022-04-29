@@ -162,7 +162,7 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
 int read_file(string paffiles,string reffile,string readsfile,string out_path)
 {
     string temp;
-    string name=" ";
+    string name="*";
     string b[100];
     uint64_t fpos;
     ifstream paffile(paffiles);
