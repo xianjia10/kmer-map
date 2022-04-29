@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 	if (mode=='g'){
 		if (align != ""){
 			// align_fmt will be transmited later.
-			string newalign=align.substr(0,align.size()-3)+"sort";
+			string newalign=align.substr(0,align.size()-3)+"sort.paf";
 			if(access(newalign.c_str(),F_OK)==-1){
 				string cmd="sort -k6,6 -k1,1 "+align+" > "+newalign; 
 				system(cmd.c_str());

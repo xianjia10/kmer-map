@@ -171,7 +171,7 @@ int read_file(string paffiles,string reffile,string readsfile,string out_path)
     lib_init(reffile,ref_lib);
     lib_init(readsfile,reads_lib);
     FILE *fw=NULL,*fp=NULL,*ri=NULL,*qi=NULL;
-    string path=out_path+paffiles+".kmermap";
+    string path=out_path+paffiles.substr(0,paffiles.size()-3)+".kmermap";
     fw=fopen(path.c_str(),"w");
     if (fw == NULL){
         perror("file fopen error!");
