@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 		exit(0);
 	};
 	if (output_path!="./"){
-		string cmd = "mkdir -p"+output_path;
+		string cmd = "mkdir -p "+output_path;
 		system(cmd.c_str());
 	}
 	if (help){
