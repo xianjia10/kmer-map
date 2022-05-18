@@ -127,9 +127,13 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
 {
     unordered_map<uint64_t,uint32_t> ref_list;
     vector<pair<uint64_t,uint32_t>> reads_list;
+    unordered_map<uint64_t,uint32_t> ref_list_over;
+    int kmapq;
+    int common_kmer=0;
     int count=0;
     ref_list=searchinref(atoi(b[7].c_str()),atoi(b[8].c_str()));
     reads_list=searchinreads (b[0],atoi(b[2].c_str()),atoi(b[3].c_str()),fp);
+    int fenmu=min(ref_list.size(),reads_list.size());
     for(int i=0;i<9;i++)
     {
         fprintf(fw, "%s\t",b[i].c_str());
@@ -138,23 +142,54 @@ int generate_posmap(string b[],FILE *fp,FILE *fw)
     while(iter_reads!=reads_list.end())
     {
         auto ietr_ref=ref_list.find(iter_reads->first);
+        auto iter_ref_over=ref_list_over.find(iter_reads->first);
         if(ietr_ref!=ref_list.end())
         {
             fprintf(fw, "%d,%d\t", iter_reads->second,ietr_ref->second);
-            count++;
-            if(count==10000)
+            common_kmer++;
+            ref_list_over[ietr_ref->first]=ietr_ref->second;
+            ref_list.erase(ietr_ref->first);
+        }
+        else if(iter_ref_over!= ref_list_over.end()){
+            fprintf(fw, "%d,%d\t", iter_reads->second,iter_ref_over->second);
+        }
+        else{
+            fprintf(fw, "%d,%d\t", iter_reads->second,0);
+        }
+        count++;
+        if(count==10000)
+        {
+            fprintf(fw,"-1\n");
+            for(int i=0;i<9;i++)
             {
-                fprintf(fw, "\n");
-                for(int i=0;i<9;i++)
-                {
-                    fprintf(fw, "%s\t",b[i].c_str());
-                }
-                count=0;
+                fprintf(fw, "%s\t",b[i].c_str());
             }
+            count=0;
         }
         iter_reads++;
     }
-    fprintf(fw, "\n");
+    for(auto it : ref_list){
+	    fprintf(fw, "%d,%d\t",0,it.second);
+        count++;
+        if(count==10000)
+        {
+            fprintf(fw,"-1\n");
+            for(int i=0;i<9;i++)
+            {
+                fprintf(fw, "%s\t",b[i].c_str());
+            }
+            count=0;
+        }
+    }
+    if (fenmu==0)
+    {
+        kmapq=0;
+    }
+    else{
+        float v=(float)(common_kmer)/fenmu;
+        kmapq=(int)(100*v+0.5);
+    }
+    fprintf(fw, "%d\n",kmapq);
     return 1;
 }
 
