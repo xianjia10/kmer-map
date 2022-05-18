@@ -56,3 +56,6 @@ kmermap genmap <r_pos> <q_pos> <paf>
     -h, --help            Show this page
     -V, --version         Version
 ```
+### Output file description
+The *.sort.paf is the result of *.paf sorted by reference name and query name.
+The *.sort.kmermap file contains the final result.
