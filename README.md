@@ -35,7 +35,7 @@ kmermap [-t <threads>] [-o <out_path>] build [-q <query>] [-r <reffile>] <kmerfi
 
 2.generate kmer map
 ```bash
-kmermap genmap <r_pos> <q_pos> <paf>
+kmermap  [-o <out_path>] genmap <r_pos> <q_pos> <paf>
 ```
 
 ### Usage Details
